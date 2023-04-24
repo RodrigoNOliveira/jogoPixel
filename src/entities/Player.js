@@ -137,6 +137,222 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
             repeat: -1
         });
 
+
+        //SIT
+
+        this.anims.create({
+            key: 'sit-right',
+            frames: this.anims.generateFrameNumbers('player', {start: 52,end:57 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'sit-left',
+            frames: this.anims.generateFrameNumbers('player', {start: 58,end:63 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+       
+
+        //PHONE
+        this.anims.create({
+            key: 'phone',
+            frames: this.anims.generateFrameNumbers('player', {start: 64,end:75 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        
+
+        //BOOK
+        this.anims.create({
+            key: 'book',
+            frames: this.anims.generateFrameNumbers('player', {start: 76,end:87 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        
+        //CATCH
+        this.anims.create({
+            key: 'catch-right',
+            frames: this.anims.generateFrameNumbers('player', {start: 88,end:99 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'catch-up',
+            frames: this.anims.generateFrameNumbers('player', {start: 100,end:111 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'catch-left',
+            frames: this.anims.generateFrameNumbers('player', {start: 112,end:123 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'catch-down',
+            frames: this.anims.generateFrameNumbers('player', {start: 124,end:135 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        //GIFT
+        this.anims.create({
+            key: 'gift-right',
+            frames: this.anims.generateFrameNumbers('player', {start: 136,end:145 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'gift-up',
+            frames: this.anims.generateFrameNumbers('player', {start: 146,end:155 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'gift-left',
+            frames: this.anims.generateFrameNumbers('player', {start: 156,end:165 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'gift-down',
+            frames: this.anims.generateFrameNumbers('player', {start: 166,end:175 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        //PUNCH
+        this.anims.create({
+            key: 'punch-right',
+            frames: this.anims.generateFrameNumbers('player', {start: 176,end:181 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'punch-up',
+            frames: this.anims.generateFrameNumbers('player', {start: 182,end:187 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'punch-left',
+            frames: this.anims.generateFrameNumbers('player', {start: 188,end:193 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'punch-down',
+            frames: this.anims.generateFrameNumbers('player', {start: 194,end:199 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        //GUN
+        this.anims.create({
+            key: 'gun-right',
+            frames: this.anims.generateFrameNumbers('player', {start: 200,end:203 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'gun-up',
+            frames: this.anims.generateFrameNumbers('player', {start: 204,end:207 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'gun-left',
+            frames: this.anims.generateFrameNumbers('player', {start: 208,end:211 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'gun-down',
+            frames: this.anims.generateFrameNumbers('player', {start: 212,end:215 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        //FIRE
+        this.anims.create({
+            key: 'fire-right',
+            frames: this.anims.generateFrameNumbers('player', {start: 216,end:218 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'fire-up',
+            frames: this.anims.generateFrameNumbers('player', {start: 219,end:221 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'fire-left',
+            frames: this.anims.generateFrameNumbers('player', {start: 222,end:224 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'fire-down',
+            frames: this.anims.generateFrameNumbers('player', {start: 225,end:227 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        //DAMAGE
+        this.anims.create({
+            key: 'fire-right',
+            frames: this.anims.generateFrameNumbers('player', {start: 228,end:230 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'fire-up',
+            frames: this.anims.generateFrameNumbers('player', {start: 231,end:233 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'fire-left',
+            frames: this.anims.generateFrameNumbers('player', {start: 234,end:236 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'fire-down',
+            frames: this.anims.generateFrameNumbers('player', {start: 238,end:240 }),
+            frameRate: this
+            .frameRate,
+            repeat: -1
+        });
+        
+        
+
     }
 
 }
