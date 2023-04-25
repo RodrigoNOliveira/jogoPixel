@@ -1,12 +1,16 @@
+import { CONFIG } from "../config";
 
 
 export default class Player extends Phaser.Physics.Arcade.Sprite{
     /**@type {Phaser.Type.Input.Keyboard.CursorKeys} */
     cursors;
 
+    touch;
 
-    constructor(scene, x, y){
+    constructor(scene, x, y, touch){
         super(scene, x, y, 'player');
+
+        this.touch = touch;
 
         scene.add.existing(this);               //criando a img que o jogador ve
         scene.physics.add.existing(this);       //criando o body da fisica
@@ -22,7 +26,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
         this.frameRate = 8;
         this.direction = 'down';
         this.cursors = this.scene.input.keyboard.createCursorKeys();
+        
+        this.setOrigin(0,0.5);
 
+        this.body.setSize(14,10);
+        this.body.setOffset(1,22);
         this.initAnimations();
 
 
@@ -40,7 +48,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
     }
 
     update(){
-        const { left, right, down, up} = this.cursors;
+        const { left, right, down, up, space} = this.cursors;
 
         if (left.isDown){
             this.direction ='left';
@@ -62,6 +70,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
             this.setVelocityY(0);
         }
 
+        if(space.isDown){
+            console.log("ESPACO");
+        }
+
 
         if(this.body.velocity.x ===0 && this.body.velocity.y ===0){
             this.play('idle-' + this.direction, true);
@@ -69,6 +81,31 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
             this.play('walk-' + this.direction, true);
         }
 
+
+
+            //FAZER O TOUCH SEGUIR O PLAYER 
+            let tx, ty;
+            let distance = 16;
+            switch(this.direction){
+                case 'down':
+                    tx = 0;
+                    ty = distance;
+                    break;
+                case 'up':
+                    tx = 0;
+                    ty = -distance + CONFIG.TILE_SIZE;
+                    break;
+                case 'right':
+                    tx = distance/2;
+                    ty = CONFIG.TILE_SIZE/2;
+                    break;
+                case 'left':
+                    tx = -distance/2;
+                    ty = CONFIG.TILE_SIZE/2;
+                    break;
+                
+            }
+            this.touch.setPosition(this.x + tx + CONFIG.TILE_SIZE/2, this.y + ty);
 
     }
 

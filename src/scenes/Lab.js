@@ -1,19 +1,19 @@
 import { Scene } from "phaser";
 import { CONFIG } from "../config";
 import Player from "../entities/Player";
+import Touch from "../entities/Touch";
 
 export default class Lab extends Scene {
 
     /**@type {Phaser.Tilemaps.Tilemap} */
     map;
-    layers;
 
+    layers = {};
 
     /**@type {Player} */
     player;
 
-
-
+    touch;
 
 
     constructor() {
@@ -38,12 +38,25 @@ export default class Lab extends Scene {
     create(){
         this.createMap();
         this.createLayers();
-        this.player = new Player(this, 144, 90);
+        this.createPlayer();
 
+        this.createColliders();
         this.createCamera();
     }
 
     update(){
+        
+
+    }
+
+
+    createPlayer(){
+        this.touch = new Touch(this, 16*8, 16*5);
+        
+        this.player = new Player(this, 16*8, 16*5, this.touch);
+        this.player.setDepth(2);
+
+
         
     }
 
@@ -60,7 +73,41 @@ export default class Lab extends Scene {
 
     }
 
+
     createLayers() {
+        const tilesOffice = this.map.getTileset('tiles_office');
+
+        const layerNames = this.map.getTileLayerNames();
+        for (let i = 0; i < layerNames.length; i++){
+            const name = layerNames[i];
+            
+            this.layers[name] = this.map.createLayer(name, [tilesOffice], 0,0);
+            this.layers[name].setDepth( i );
+
+
+            //verifica se o layer possui colisão
+            if(name.endsWith('Collision')){
+                this.layers[name].setCollisionByProperty({collide: true});
+
+                if ( CONFIG.DEBUG_COLLISION ) {
+                    const debugGraphics = this.add.graphics().setAlpha(0.75).setDepth(i);
+                    this.layers[name].renderDebug(debugGraphics, {
+                        tileColor: null, // Color of non-colliding tiles
+                        collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+                        faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
+                    });
+                }
+
+            }
+
+        }
+
+        
+        
+    }
+
+
+    createLayersManual() {
         const tilesOffice = this.map.getTileset('tiles_office')
 
         this.map.createLayer('nivel0', [tilesOffice], 0, 0);
@@ -78,4 +125,19 @@ export default class Lab extends Scene {
         this.cameras.main.setBounds(0,0, mapWidth, mapHeigth);
         this.cameras.main.startFollow(this.player);
     }
+
+
+    createColliders(){
+        const layerNames = this.map.getTileLayerNames();
+        for (let i = 0; i < layerNames.length; i++){
+            const name = layerNames[i];
+
+            if(name.endsWith('Collision')){
+                this.physics.add.collider(this.player, this.layers[name]);
+            }
+
+        }
+
+    }
+
 }
