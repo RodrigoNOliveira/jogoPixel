@@ -20,6 +20,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
         this.init();
     }
 
+    preload(){
+        this.preload.image('mao', 'assets/mao.jpg');
+    }
+
     init(){
         this.setFrame(3);
         this.speed =120;
@@ -70,9 +74,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
             this.setVelocityY(0);
         }
 
-        if(space.isDown){
-            console.log("ESPACO");
-        }
+       
 
 
         if(this.body.velocity.x ===0 && this.body.velocity.y ===0){
@@ -82,7 +84,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
         }
 
 
-
+        if(space.isDown){
+            console.log("ESPACO");
+            this.touch.setVisible(true);
+        }
+        else{
+            this.touch.setVisible(false);
+        }
             //FAZER O TOUCH SEGUIR O PLAYER 
             let tx, ty;
             let distance = 16;
@@ -106,6 +114,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
                 
             }
             this.touch.setPosition(this.x + tx + CONFIG.TILE_SIZE/2, this.y + ty);
+
 
     }
 
