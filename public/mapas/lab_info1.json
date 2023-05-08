@@ -81,9 +81,71 @@
          "width":19,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":7,
+         "name":"Objeto",
+         "objects":[
+                {
+                 "height":12,
+                 "id":3,
+                 "name":"cadeira",
+                 "properties":[
+                        {
+                         "name":"local",
+                         "type":"string",
+                         "value":"corredor"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":12,
+                 "x":129.75,
+                 "y":129.875
+                }, 
+                {
+                 "height":12,
+                 "id":7,
+                 "name":"cadeira",
+                 "properties":[
+                        {
+                         "name":"local",
+                         "type":"string",
+                         "value":"corredor"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":12,
+                 "x":161.875,
+                 "y":145.875
+                }, 
+                {
+                 "height":12,
+                 "id":8,
+                 "name":"cadeira",
+                 "properties":[
+                        {
+                         "name":"local",
+                         "type":"string",
+                         "value":"mesa"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":12,
+                 "x":65.375,
+                 "y":145.625
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":7,
- "nextobjectid":1,
+ "nextlayerid":8,
+ "nextobjectid":9,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"2021.03.23",

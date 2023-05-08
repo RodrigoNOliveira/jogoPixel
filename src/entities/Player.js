@@ -7,6 +7,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
 
     touch;
 
+    isAction = false;
+
     constructor(scene, x, y, touch){
         super(scene, x, y, 'player');
 
@@ -75,6 +77,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
         }
 
        
+        if(space.isDown){
+            this.isAction = true;
+        }
+        else{
+            this.isAction = false;
+        }
 
 
         if(this.body.velocity.x ===0 && this.body.velocity.y ===0){
@@ -84,13 +92,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
         }
 
 
-        if(space.isDown){
-            console.log("ESPACO");
-            this.touch.setVisible(true);
-        }
-        else{
-            this.touch.setVisible(false);
-        }
             //FAZER O TOUCH SEGUIR O PLAYER 
             let tx, ty;
             let distance = 16;

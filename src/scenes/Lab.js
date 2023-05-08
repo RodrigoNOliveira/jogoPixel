@@ -15,6 +15,10 @@ export default class Lab extends Scene {
 
     touch;
 
+    /**@type {Phaser.Physics.Arcade.Group} */
+    groupObjects;
+
+    isTouching = false;
 
     constructor() {
         super('Lab');
@@ -38,6 +42,7 @@ export default class Lab extends Scene {
     create(){
         this.createMap();
         this.createLayers();
+        this.createObjects();
         this.createPlayer();
 
         this.createColliders();
@@ -70,6 +75,33 @@ export default class Lab extends Scene {
         //Fazendo a correspondencia entre as imagens usadas no Tiled
         // e as carregadas pelo Phaser
         this.map.addTilesetImage('tiles_office', 'tiles-office');
+
+    }
+
+
+    createObjects(){
+        this.groupObjects = this.physics.add.group();
+        
+        const objects = this.map.createFromObjects("Objeto",{
+            name: "cadeira",
+        })
+
+        this.physics.world.enable(objects);
+
+        for(let i=0; i<objects.length; i++){
+            const obj= objects[i];
+
+            const prop = this.map.objects[0].objects[i];
+
+            obj.setDepth(this.layers.length+1);
+            obj.setVisible(false);
+
+            this.groupObjects.add(obj);
+            console.log(obj);
+        }
+
+
+
 
     }
 
@@ -128,6 +160,13 @@ export default class Lab extends Scene {
 
 
     createColliders(){
+        //diferenca entre collider e overlap:
+        //COLLIDER: colide e impede a passagem
+        //OVERLAP: detecta a sobreposição dos elemetos, não impede a passagem
+
+
+
+        //criando colisao entre o player e as camadas de colisao do tiled
         const layerNames = this.map.getTileLayerNames();
         for (let i = 0; i < layerNames.length; i++){
             const name = layerNames[i];
@@ -137,7 +176,32 @@ export default class Lab extends Scene {
             }
 
         }
+        //criando a colisao entre a "maozinha" do player (touch) e os objetos da camada de objetos
 
+        //chama a funcao this.handleTouch toda vez que o this.touch entrar em contato com um objeto do this.groupObjects
+        this.physics.add.overlap(this.touch, this.groupObjects, this.handleTouch, undefined, this);
     }
+
+
+    handleTouch(touch, object){
+
+        if(this.isTouching && this.player.isAction){
+            return;
+        }
+
+        if(this.isTouching && !this.player.isAction){
+            this.isTouching = false;
+            return;
+        }
+
+        if(this.player.isAction){
+            this.isTouching = true;
+           console.log("Estou tocando"); 
+           //console.log(object);
+        }
+
+        
+    }
+
 
 }
