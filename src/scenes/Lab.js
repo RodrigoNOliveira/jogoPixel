@@ -1,4 +1,4 @@
-import { Scene } from "phaser";
+import { Physics, Scene } from "phaser";
 import { CONFIG } from "../config";
 import Player from "../entities/Player";
 import Touch from "../entities/Touch";
@@ -35,34 +35,34 @@ export default class Lab extends Scene {
         //Importando um spritesheet
         this.load.spritesheet('player', 'mapas/tiles/RodrigoNathan.png', {
             frameWidth: CONFIG.TILE_SIZE,
-            frameHeight: CONFIG.TILE_SIZE *2
+            frameHeight: CONFIG.TILE_SIZE * 2
         })
     }
 
-    create(){
+    create() {
         this.createMap();
         this.createLayers();
-        this.createObjects();
-        this.createPlayer();
 
+        this.createPlayer();
+        this.createObjects();
         this.createColliders();
         this.createCamera();
     }
 
-    update(){
-        
+    update() {
+
 
     }
 
 
-    createPlayer(){
-        this.touch = new Touch(this, 16*8, 16*5);
-        
-        this.player = new Player(this, 16*8, 16*5, this.touch);
+    createPlayer() {
+        this.touch = new Touch(this, 16 * 8, 16 * 5);
+
+        this.player = new Player(this, 16 * 8, 16 * 5, this.touch);
         this.player.setDepth(2);
 
 
-        
+
     }
 
     createMap() {
@@ -79,21 +79,21 @@ export default class Lab extends Scene {
     }
 
 
-    createObjects(){
+    createObjects() {
         this.groupObjects = this.physics.add.group();
-        
-        const objects = this.map.createFromObjects("Objeto",{
+
+        const objects = this.map.createFromObjects("Objeto", {
             name: "cadeira",
         })
 
         this.physics.world.enable(objects);
 
-        for(let i=0; i<objects.length; i++){
-            const obj= objects[i];
+        for (let i = 0; i < objects.length; i++) {
+            const obj = objects[i];
 
             const prop = this.map.objects[0].objects[i];
 
-            obj.setDepth(this.layers.length+1);
+            obj.setDepth(this.layers.length + 1);
             obj.setVisible(false);
 
             this.groupObjects.add(obj);
@@ -110,18 +110,18 @@ export default class Lab extends Scene {
         const tilesOffice = this.map.getTileset('tiles_office');
 
         const layerNames = this.map.getTileLayerNames();
-        for (let i = 0; i < layerNames.length; i++){
+        for (let i = 0; i < layerNames.length; i++) {
             const name = layerNames[i];
-            
-            this.layers[name] = this.map.createLayer(name, [tilesOffice], 0,0);
-            this.layers[name].setDepth( i );
+
+            this.layers[name] = this.map.createLayer(name, [tilesOffice], 0, 0);
+            this.layers[name].setDepth(i);
 
 
             //verifica se o layer possui colisão
-            if(name.endsWith('Collision')){
-                this.layers[name].setCollisionByProperty({collide: true});
+            if (name.endsWith('Collision')) {
+                this.layers[name].setCollisionByProperty({ collide: true });
 
-                if ( CONFIG.DEBUG_COLLISION ) {
+                if (CONFIG.DEBUG_COLLISION) {
                     const debugGraphics = this.add.graphics().setAlpha(0.75).setDepth(i);
                     this.layers[name].renderDebug(debugGraphics, {
                         tileColor: null, // Color of non-colliding tiles
@@ -134,8 +134,8 @@ export default class Lab extends Scene {
 
         }
 
-        
-        
+
+
     }
 
 
@@ -147,19 +147,19 @@ export default class Lab extends Scene {
         this.map.createLayer('nivel1_1', [tilesOffice], 0, 0);
         this.map.createLayer('nivel2_1', [tilesOffice], 0, 0);
         this.map.createLayer('nivel2', [tilesOffice], 0, 0);
-        
+
     }
 
-    createCamera(){
+    createCamera() {
         const mapWidth = this.map.width * CONFIG.TILE_SIZE;
-        const mapHeigth =  this.map.height * CONFIG.TILE_SIZE;
+        const mapHeigth = this.map.height * CONFIG.TILE_SIZE;
 
-        this.cameras.main.setBounds(0,0, mapWidth, mapHeigth);
+        this.cameras.main.setBounds(0, 0, mapWidth, mapHeigth);
         this.cameras.main.startFollow(this.player);
     }
 
 
-    createColliders(){
+    createColliders() {
         //diferenca entre collider e overlap:
         //COLLIDER: colide e impede a passagem
         //OVERLAP: detecta a sobreposição dos elemetos, não impede a passagem
@@ -168,10 +168,10 @@ export default class Lab extends Scene {
 
         //criando colisao entre o player e as camadas de colisao do tiled
         const layerNames = this.map.getTileLayerNames();
-        for (let i = 0; i < layerNames.length; i++){
+        for (let i = 0; i < layerNames.length; i++) {
             const name = layerNames[i];
 
-            if(name.endsWith('Collision')){
+            if (name.endsWith('Collision')) {
                 this.physics.add.collider(this.player, this.layers[name]);
             }
 
@@ -183,24 +183,54 @@ export default class Lab extends Scene {
     }
 
 
-    handleTouch(touch, object){
+    handleTouch(touch, object) {
 
-        if(this.isTouching && this.player.isAction){
+        if (this.isTouching && this.player.isAction) {
             return;
         }
 
-        if(this.isTouching && !this.player.isAction){
+        if (this.isTouching && !this.player.isAction) {
             this.isTouching = false;
             return;
         }
 
-        if(this.player.isAction){
+        if (this.player.isAction) {
             this.isTouching = true;
-           console.log("Estou tocando"); 
-           //console.log(object);
+            if (object.name == "cadeira") {
+
+                if (this.player.body.enable == true) {
+                    this.player.body.enable = false;
+                    this.player.x = object.x - 8;
+                    this.player.y = object.y - 8;
+
+                    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.UP);
+                    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+                    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+                    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+
+                    this.player.direction = 'up';
+                    this.player.setDepth(0);
+
+                    
+                } else {
+                    console.log("TESTE")
+                    this.player.body.enable = true;
+                    this.player.x = object.x +8;
+                    this.player.y = object.y  +8;
+                    this.player.cursors = this.input.keyboard.addKeys({
+                        up: Phaser.Input.Keyboard.KeyCodes.UP,
+                        down: Phaser.Input.Keyboard.KeyCodes.DOWN,
+                        left: Phaser.Input.Keyboard.KeyCodes.LEFT,
+                        right: Phaser.Input.Keyboard.KeyCodes.RIGHT, 
+                        space: Phaser.Input.Keyboard.KeyCodes.SPACE
+                    });
+                    this.player.setDepth(2);
+                }
+            }
+
         }
 
-        
+
     }
 
 

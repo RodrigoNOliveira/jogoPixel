@@ -89,7 +89,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
             this.play('idle-' + this.direction, true);
         } else{
             this.play('walk-' + this.direction, true);
-        }
+        } 
+
 
 
             //FAZER O TOUCH SEGUIR O PLAYER 
