@@ -18,6 +18,23 @@ export default class Lab extends Scene {
     /**@type {Phaser.Physics.Arcade.Group} */
     groupObjects;
 
+    /**@type {Phaser.Physics.Arcade.Sprite} */
+    lixeira;
+
+    /**@type {Phaser.GameObjects.Text} */
+    text;
+
+
+    /**@type {Phaser.GameObjects.Text} */
+    opA;
+
+    
+    /**@type {Phaser.GameObjects.Text} */
+    opY;
+
+    /**@type {Phaser} */
+
+
     isTouching = false;
 
     constructor() {
@@ -37,16 +54,33 @@ export default class Lab extends Scene {
             frameWidth: CONFIG.TILE_SIZE,
             frameHeight: CONFIG.TILE_SIZE * 2
         })
+
+
+        this.load.spritesheet('lixeira', 'mapas/tiles/lixeiras_spritesheet.png', {
+            frameWidth: CONFIG.TILE_SIZE,
+            frameHeight: CONFIG.TILE_SIZE * 2
+        })
+
+
     }
 
     create() {
         this.createMap();
         this.createLayers();
-
         this.createPlayer();
         this.createObjects();
         this.createColliders();
         this.createCamera();
+
+
+        const style = { color: '#000', fontSize: 10, backgroundColor: '#fff', padding: 5 }
+        this.text = this.add.text(this.scale.width / 2, this.scale.height - this.scale.height / 5, "", style);
+        this.text.setScrollFactor(0);
+        this.text.setOrigin(0.5, 0);
+        this.text.visible = false;
+        this.opY = this.add.text('fechada');
+        this.opY.visible = false;
+
     }
 
     update() {
@@ -59,7 +93,7 @@ export default class Lab extends Scene {
         this.touch = new Touch(this, 16 * 8, 16 * 5);
 
         this.player = new Player(this, 16 * 8, 16 * 5, this.touch);
-        this.player.setDepth(2);
+        this.player.setDepth(1);
 
 
 
@@ -82,9 +116,22 @@ export default class Lab extends Scene {
     createObjects() {
         this.groupObjects = this.physics.add.group();
 
-        const objects = this.map.createFromObjects("Objeto", {
-            name: "cadeira",
-        })
+        const objects = this.map.createFromObjects("Objeto", [{
+            name: "cadeira"
+        },
+        {
+            name: "placa"
+        },
+        {
+            name: "lixeira"
+        },
+        {
+            name: "apagar"
+        },
+        {
+            name: "escrever"
+        }]);
+
 
         this.physics.world.enable(objects);
 
@@ -185,6 +232,7 @@ export default class Lab extends Scene {
 
     handleTouch(touch, object) {
 
+
         if (this.isTouching && this.player.isAction) {
             return;
         }
@@ -196,6 +244,101 @@ export default class Lab extends Scene {
 
         if (this.player.isAction) {
             this.isTouching = true;
+
+            if (object.name == "placa") {
+                if (this.player.body.enable == true) {
+                    this.player.body.enable = false;
+
+                    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.UP);
+                    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+                    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+                    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+
+                    if (object.x == 231.515151515151) {
+                        this.text.text = 'Proibido comer/beber neste local';
+                    }
+                    else if (object.x == 247.583333333333) {
+                        this.text.text = 'Proibido o uso de celulares neste local';
+                    }
+                    this.text.visible = true;
+                } else {
+                    console.log("TESTE");
+                    this.player.body.enable = true;
+                    this.text.text = '';
+                    this.text.visible = false;
+                    this.player.cursors = this.input.keyboard.addKeys({
+                        up: Phaser.Input.Keyboard.KeyCodes.UP,
+                        down: Phaser.Input.Keyboard.KeyCodes.DOWN,
+                        left: Phaser.Input.Keyboard.KeyCodes.LEFT,
+                        right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
+                        space: Phaser.Input.Keyboard.KeyCodes.SPACE
+                    });
+                }
+            }
+
+
+            if (object.name == "lixeira") {
+                console.log("lixo");
+                if (this.player.body.enable == true) {
+                    this.player.body.enable = false;
+                    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.UP);
+                    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+                    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+                    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+
+                    if (object.x == 263.439393939394) {
+
+
+                        if (this.opY.text == 'fechada') {
+                            this.lixeira = this.add.sprite(object.x, object.y, 'lixeira', 2);
+                            this.opY.text = 'aberta';
+                        } else if (this.opY.text == 'aberta') {
+                            this.lixeira = this.add.sprite(object.x, object.y, 'lixeira', 0);
+                            this.opY.text = 'fechada';
+                        }
+
+                    } else if (object.x == 280.25) {
+
+                        if (opA == "fechada") {
+                            this.lixeira = this.add.sprite(object.x, object.y, 'lixeira', 4);
+                            opA = "aberta";
+                        }else if(opA == "aberta"){
+                            this.lixeira = this.add.sprite(object.x, object.y, 'lixeira', 3); 
+                           opA = "fechada";
+                        }
+                    }
+
+
+                } else {
+                    console.log("TESTE");
+                    this.player.body.enable = true;
+                    this.player.cursors = this.input.keyboard.addKeys({
+                        up: Phaser.Input.Keyboard.KeyCodes.UP,
+                        down: Phaser.Input.Keyboard.KeyCodes.DOWN,
+                        left: Phaser.Input.Keyboard.KeyCodes.LEFT,
+                        right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
+                        space: Phaser.Input.Keyboard.KeyCodes.SPACE
+                    });
+
+
+                    if (object.x == 263.439393939394) {
+
+
+                    } else if (object.x == 280.25) {
+
+                    }
+                    this.player.setDepth(2);
+                }
+
+
+
+
+
+
+
+            }
+
+
             if (object.name == "cadeira") {
 
                 if (this.player.body.enable == true) {
@@ -208,20 +351,26 @@ export default class Lab extends Scene {
                     this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
                     this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 
-                    this.player.direction = 'up';
                     this.player.setDepth(0);
 
-                    
+                    if (object.x == 39.6667 && object.y == 70.6667) {
+                        this.player.direction = 'down';
+                        this.player.setDepth(1);
+                    } else {
+                        this.player.direction = 'up';
+                    }
+
+
                 } else {
-                    console.log("TESTE")
+                    console.log("TESTE");
                     this.player.body.enable = true;
-                    this.player.x = object.x +8;
-                    this.player.y = object.y  +8;
+                    this.player.x = object.x - 8;
+                    this.player.y = object.y + 8;
                     this.player.cursors = this.input.keyboard.addKeys({
                         up: Phaser.Input.Keyboard.KeyCodes.UP,
                         down: Phaser.Input.Keyboard.KeyCodes.DOWN,
                         left: Phaser.Input.Keyboard.KeyCodes.LEFT,
-                        right: Phaser.Input.Keyboard.KeyCodes.RIGHT, 
+                        right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
                         space: Phaser.Input.Keyboard.KeyCodes.SPACE
                     });
                     this.player.setDepth(2);
@@ -232,6 +381,67 @@ export default class Lab extends Scene {
 
 
     }
+
+
+
+    // initAnimations(){
+    //     //abertaAzul
+    //     this.anims.create({
+    //         key: 'abertaAzul',
+    //         frames: this.anims.generateFrameNumbers('lixeira', 4),
+    //         frameRate: this
+    //         .frameRate,
+    //         repeat: -1
+    //     });
+
+    //     //abertaAmarela
+    //     this.anims.create({
+    //         key: 'abertaAmarela',
+    //         frames: this.anims.generateFrameNumbers('lixeira', 1),
+    //         frameRate: this
+    //         .frameRate,
+    //         repeat: -1
+    //     });
+    //      //cheiaAzul
+    //      this.anims.create({
+    //         key: 'cheiaAzul',
+    //         frames: this.anims.generateFrameNumbers('lixeira', 5),
+    //         frameRate: this
+    //         .frameRate,
+    //         repeat: -1
+    //     });
+
+    //     //cheiaAmarela
+    //     this.anims.create({
+    //         key: 'cheiaAmarela',
+    //         frames: this.anims.generateFrameNumbers('lixeira', 2),
+    //         frameRate: this
+    //         .frameRate,
+    //         repeat: -1
+    //     });
+
+    //      //fechadaAzul
+    //      this.anims.create({
+    //         key: 'fechadaAzul',
+    //         frames: this.anims.generateFrameNumbers('lixeira', 5),
+    //         frameRate: this
+    //         .frameRate,
+    //         repeat: -1
+    //     });
+
+    //     //fechadaAmarela
+    //     this.anims.create({
+    //         key: 'fechadaAmarela',
+    //         frames: this.anims.generateFrameNumbers('lixeira', 2),
+    //         frameRate: this
+    //         .frameRate,
+    //         repeat: -1
+    //     });
+
+
+    // }
+
+
 
 
 }

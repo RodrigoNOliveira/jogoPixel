@@ -42,14 +42,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
 
         this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
 
-        //this.play('idle-right');
-        //this.play('idle-up');
-        //this.play('idle-left');
-        //this.play('idle-down');
-        //this.play('walk-right');
-        //this.play('walk-up');
-        //this.play('walk-left');
-        //this.play('walk-down');
+
 
     }
 
