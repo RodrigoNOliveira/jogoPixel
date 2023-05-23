@@ -1,12 +1,13 @@
 import {AUTO} from "phaser";
 import { CONFIG } from "./src/config";
 import Lab from "./src/scenes/Lab";
+import Lab2 from "./src/scenes/Lab2";
 
 const config = {
     width: CONFIG.GAME_WIDTH,
     height: CONFIG.GAME_HEIGHT,
     type: AUTO,
-    scene: [Lab],
+    scene: [Lab2],
     physics: {
         default: 'arcade',
         arcade: {

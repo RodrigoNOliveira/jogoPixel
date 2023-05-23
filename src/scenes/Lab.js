@@ -299,13 +299,10 @@ export default class Lab extends Scene {
 
                     } else if (object.x == 280.25) {
 
-                        if (opA == "fechada") {
+                      
                             this.lixeira = this.add.sprite(object.x, object.y, 'lixeira', 4);
-                            opA = "aberta";
-                        }else if(opA == "aberta"){
-                            this.lixeira = this.add.sprite(object.x, object.y, 'lixeira', 3); 
-                           opA = "fechada";
-                        }
+                            
+                        
                     }
 
 
