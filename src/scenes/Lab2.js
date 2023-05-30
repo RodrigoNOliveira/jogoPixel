@@ -1,5 +1,6 @@
 import { Scene } from "phaser";
 import { CONFIG } from "../config";
+import HUD from "../entities/HUD";
 
 
 export default class Lab2 extends Scene {
@@ -9,18 +10,10 @@ export default class Lab2 extends Scene {
     map;
 
     layers = {};
+    hud;
 
-    /**@type {Phaser.GameObjects.Container} */
-    dialog;
 
-    /**@type {Phaser.GameObjects.Text} */
-    dialogText;
-
-    /**@type {Phaser.GameObjects.Sprite} */
-    dialogNext;
-
-    dialogPositionShow;
-    dialogPositionHide;
+    spaceDown = false;
 
 
     constructor() {
@@ -39,11 +32,28 @@ export default class Lab2 extends Scene {
     }
 
     create() {
+
+        this.cursors = this.input.keyboard.createCursorKeys();
+
         this.createMap();
         this.createLayers();
 
-        this.createDialog();
-        this.showDialog('Este é o texto que deve aparecer na caixa de dialogo, por favor coloquem um texto grande aqui para que ele use varias linhas.');
+        this.hud = new HUD(this, 0, 0);
+
+
+
+    }
+
+    update() {
+        const { space } = this.cursors;
+
+        if (space.isDown && !this.spaceDown) {
+            this.spaceDown = true;
+            console.log("espaço");
+            this.hud.showDialog('Este é o texto que deve aparecer na caixa de dialogo, por favor coloquem um texto grande aqui para que ele use varias linhas.');
+        } else if (!space.isDown && this.spaceDown) {
+            this.spaceDown = false;
+        }
     }
 
     createMap() {
@@ -71,84 +81,5 @@ export default class Lab2 extends Scene {
         }
     }
 
-
-    createDialog() {
-        this.dialog = this.add.container(0, 0).setDepth(10);
-
-        const tile = CONFIG.TILE_SIZE;
-        const widthDialog = CONFIG.GAME_WIDTH - (2 * tile);
-        const heightDialog = 3 * tile;
-
-        this.dialogPositionShow = CONFIG.GAME_HEIGHT - heightDialog - tile * 2;
-        this.dialogPositionHide = CONFIG.GAME_HEIGHT + tile;
-
-
-
-        this.dialog.add([
-            this.add.image(0, 0, 'hud', 'dialog_topleft'),
-            this.add.image(16, 0, 'hud', 'dialog_top').setDisplaySize(widthDialog, tile),
-            this.add.image(widthDialog + tile, 0, 'hud', 'dialog_topright'),
-
-            this.add.image(0, 16, 'hud', 'dialog_left').setDisplaySize(tile, heightDialog),
-            this.add.image(16, 16, 'hud', 'dialog_center').setDisplaySize(widthDialog, heightDialog),
-            this.add.image(widthDialog + tile, 16, 'hud', 'dialog_right').setDisplaySize(tile, heightDialog),
-
-            this.add.image(0, heightDialog + tile, 'hud', 'dialog_bottomleft'),
-            this.add.image(16, heightDialog + tile, 'hud', 'dialog_bottom').setDisplaySize(widthDialog, tile),
-            this.add.image(widthDialog + tile, heightDialog + tile, 'hud', 'dialog_bottomright'),
-
-
-        ]);
-
-        this.dialog.setPosition(0, this.dialogPositionHide);
-
-
-        const style = {
-            fontFamily: 'Verdana',
-            fontSize: 11,
-            color: '#6b5052',
-            maxLines: 3,
-            wordWrap: { width: widthDialog }
-
-        }
-
-        this.dialogText = this.add.text(tile, tile, 'Meu texto', style);
-        this.dialog.add(this.dialogText);
-    }
-
-
-
-    showDialog(text) {
-        this.dialogText.text = '';
-
-        //verifica se ele esta fora da tela
-        if(this.dialog.y > this.dialogPositionShow){
-            this.add.tween({
-                targets: this.dialog,
-                duration: 400,
-                y: this.dialogPositionShow,
-                ease: Phaser.Math.Easing.Back.Out,
-                onComplete:()=>{
-                    this.showText(text);
-                }
-            });
-        }else{
-            this.showText(text);
-        }
-
-    }
-
-
-    showText(text){
-        // this.dialogText.text = text;
-        let i = 0;
-        this.time.addEvent({
-            repeat: text.length -1,
-            delay: 32,
-            callback: () =>{
-                this.dialogText.text += text[i++]
-            }
-        })
-    }
 
 }

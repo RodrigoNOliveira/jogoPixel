@@ -62,19 +62,14 @@ export default class Lab extends Scene {
             frameHeight: CONFIG.TILE_SIZE * 2
         })
 
-        this.load.spritesheet('lixoAzul', 'mapas/tiles/lixeiras_spritesheet.png', {
-            frameWidth: CONFIG.TILE_SIZE,
-            frameHeight: CONFIG.TILE_SIZE * 2
-        })
-
 
     }
 
     create() {
         this.createMap();
         this.createLayers();
-        this.createLixeiras();
         this.createPlayer();
+        this.createLixeiras();
         this.createObjects();
         this.createColliders();
         this.createCamera();
@@ -88,9 +83,11 @@ export default class Lab extends Scene {
 
 
         const style1 = { color: '#000', fontSize: 10 }
-        this.quadro = this.add.text(this.scale.width / 2, this.scale.height / 10, "", style1).setDepth(this.layers.length + 1);
+        this.quadro = this.add.text(this.scale.width / 2, this.scale.height / 10, "", style1);
         this.quadro.setOrigin(0.5, 0);
         this.quadro.visible = false;
+        this.quadro.setDepth(this.player.depth - 1);
+        console.log(this.quadro.depth, this.player.depth);
 
     }
 
@@ -299,10 +296,11 @@ export default class Lab extends Scene {
                     this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 
                     this.quadro.text = 'Jogos Digitais';
+                    this.quadro.setDepth(this.player.depth-2);
                     this.quadro.visible = true;
                 } else {
                     console.log("TESTE");
-                    this.quadro.setDepth(this.layers.length+1);
+                    // this.quadro.setDepth(this.layers.length+1);
                     this.player.body.enable = true;
                     this.player.cursors = this.input.keyboard.addKeys({
                         up: Phaser.Input.Keyboard.KeyCodes.UP,
@@ -341,7 +339,6 @@ export default class Lab extends Scene {
 
 
             if (object.name == "lixeira") {
-                console.log("lixo");
                 if (this.player.body.enable == true) {
                     this.player.body.enable = false;
                     this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.UP);
@@ -427,11 +424,7 @@ export default class Lab extends Scene {
 
     createLixeiras() {
         this.lixoLaranja = this.add.sprite(CONFIG.TILE_SIZE*16, 4 * CONFIG.TILE_SIZE, 'lixeira', 'lixeiraLaranja').setOrigin(0, 1).setDepth(this.layers.length + 1).setFrame(0);
-
-
-        this.lixoAzul = this.add.sprite(CONFIG.TILE_SIZE*17, 4 * CONFIG.TILE_SIZE, 'lixeira', 'lixeiraAzul').setOrigin(0, 1).setDepth(this.layers.length + 1).setFrame(3);
-
-        
+        this.lixoAzul = this.add.sprite(CONFIG.TILE_SIZE*17, 4 * CONFIG.TILE_SIZE, 'lixeira', 'lixeiraAzul').setOrigin(0, 1).setDepth(this.player.depth-1).setFrame(3);  
     }
 
 }
